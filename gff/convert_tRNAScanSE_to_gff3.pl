@@ -1,16 +1,11 @@
 #!/usr/bin/env perl
 
 =head1 NAME
-
 tRNAScan_SE_to_gff3.pl - convert raw output of tRNAScan-SE to gff3
-
 =head1 SYNOPSIS
-
 USAGE: convert_tRNAScanSE_to_gff3.pl 
             --input=/path/to/some_file.out 
-
 =head1 OPTIONS
-
 B<--input,-i>
     The raw output from tRNAScan-SE:
     
@@ -32,30 +27,19 @@ B<--input,-i>
     tp.assembly.567468735.1         13      1255051 1254968 Leu     CAA     0       0       60.46
     tp.assembly.567468735.1         14      251108  251037  Asp     GTC     0       0       59.48
     tp.assembly.567468735.1         15      250520  250449  Asp     GTC     0       0       59.48
-
 B<--log,-l> 
     Log file
-
 B<--help,-h>
     This help message
-
 =head1  DESCRIPTION
-
 File converter
-
 =head1  INPUT
-
 Input above.
-
 =head1  OUTPUT
-
 GFF3 to STDOUT
-
 =head1  CONTACT
-
     Kyle Tretina
     kyletretina@gmail.com
-
 =cut
 
 use warnings;
@@ -117,30 +101,30 @@ foreach my $line (<$ifh>){
    		if ($start < $stop){
 			my $intron_start = $cols[6]-1; ## offset intron boundaries
 			my $intron_end = $cols[7]+1;
-			print "$contig\ttRNAScan-SE\tgene\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\_gene\n";
-			print "$contig\ttRNAScan-SE\ttRNA\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\_tRNA;Name=tRNA-$trna;anticodon=$anticodon \n";
-			print "$contig\ttRNAScan-SE\texon\t$start\t$intron_start\t$score\t+\t.\tID=tRNA-$trna$i\_exon;Note=contains predicted Intron\n";
-			print "$contig\ttRNAScan-SE\texon\t$intron_end\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\_exon;Parent=tRNA-$trna$i\_exon\n";
+			print "$contig\ttRNAScan-SE\tgene\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\n";
+			print "$contig\ttRNAScan-SE\ttRNA\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\.t1;Parent=tRNA-$trna$i;product=tRNA-$trna\n";
+			print "$contig\ttRNAScan-SE\texon\t$start\t$intron_start\t$score\t+\t.\tID=tRNA-$trna$i\:exon:1;Parent=tRNA-$trna$i\.t1;product=tRNA-$trna\n";
+			print "$contig\ttRNAScan-SE\texon\t$intron_end\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\:exon:2;Parent=tRNA-$trna$i\.t1;product=tRNA-$trna\n";
 			$i++;
     	}else{
 			my $intron_start = $cols[6]+1; ## offset intron boundaries
 			my $intron_end = $cols[7]-1;
-			print "$contig\ttRNAScan-SE\tgene\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\_gene\n";
-			print "$contig\ttRNAScan-SE\ttRNA\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\_tRNA;Name=tRNA-$trna;anticodon=$anticodon \n";
-			print "$contig\ttRNAScan-SE\texon\t$stop\t$intron_end\t$score\t-\t.\tID=tRNA-$trna$i\_exon;Note=contains predicted Intron\n";
-			print "$contig\ttRNAScan-SE\texon\t$intron_start\t$start\t$score\t-\t.\tID=tRNA-$trna$i\_exon;Parent=tRNA-$trna$i\_exon\n";
+			print "$contig\ttRNAScan-SE\tgene\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\n";
+			print "$contig\ttRNAScan-SE\ttRNA\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\.t1;Parent=tRNA-$trna$i;product=tRNA-$trna\n";
+			print "$contig\ttRNAScan-SE\texon\t$stop\t$intron_end\t$score\t-\t.\tID=tRNA-$trna$i\:exon:1;Parent=tRNA-$trna$i\.t1;product=tRNA-$trna\n";
+			print "$contig\ttRNAScan-SE\texon\t$intron_start\t$start\t$score\t-\t.\tID=tRNA-$trna$i\:exon:2;Parent=tRNA-$trna$i\.t1;product=tRNA-$trna\n";
 			$i++;
 		}
 	} else{
 		if ($start < $stop){
-			print "$contig\ttRNAScan-SE\tgene\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\_gene\n";
-			print "$contig\ttRNAScan-SE\ttRNA\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\_tRNA;Name=tRNA-$trna;anticodon=$anticodon \n";
-			print "$contig\ttRNAScan-SE\texon\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\_exon\n";
+			print "$contig\ttRNAScan-SE\tgene\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\n";
+			print "$contig\ttRNAScan-SE\ttRNA\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\.t1;Parent=tRNA-$trna$i;product=tRNA-$trna\n";
+			print "$contig\ttRNAScan-SE\texon\t$start\t$stop\t$score\t+\t.\tID=tRNA-$trna$i\:exon:1;Parent=tRNA-$trna$i\.t1;product=tRNA-$trna\n";
 			$i++;
 		}else{
-			print "$contig\ttRNAScan-SE\tgene\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\_gene\n";
-			print "$contig\ttRNAScan-SE\ttRNA\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\_tRNA;Name=tRNA-$trna;anticodon=$anticodon \n";
-			print "$contig\ttRNAScan-SE\texon\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\_exon\n";
+			print "$contig\ttRNAScan-SE\tgene\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\n";
+			print "$contig\ttRNAScan-SE\ttRNA\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\.t1;Parent=tRNA-$trna$i;product=tRNA-$trna\n";
+			print "$contig\ttRNAScan-SE\texon\t$stop\t$start\t$score\t-\t.\tID=tRNA-$trna$i\:exon:1;Parent=tRNA-$trna$i\.t1;product=tRNA-$trna\n";
 			$i++;
 		}
 	}
@@ -166,4 +150,3 @@ sub check_parameters {
     ## handle some defaults
     $options{optional_argument2}   = 'foo'  unless ($options{optional_argument2});
 }
-
